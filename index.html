@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARVEN Studio — Architecture & Consultancy</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ob:#0D0D0B;--ch:#1A1814;--st:#8A8070;--pa:#C8BFA8;
+  --iv:#F5F0E8;--go:#B8A882;--sa:#6B7B6E;--li:#E8DDD0;
+  --wh:#FFFFFF;--er:#C0392B;--ok:#6B7B6E;
+  --radius:4px;--transition:0.35s cubic-bezier(.4,0,.2,1);
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:'Jost',sans-serif;font-weight:300;background:var(--ob);color:var(--pa);overflow-x:hidden}
+
+/* ═══ SCROLLBAR ═══ */
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--ob)}
+::-webkit-scrollbar-thumb{background:var(--st)}
+
+/* ═══ CURSOR ═══ */
+.cursor{position:fixed;width:8px;height:8px;background:var(--go);border-radius:50%;pointer-events:none;z-index:9999;transition:transform .15s,opacity .3s;transform:translate(-50%,-50%)}
+.cursor-ring{position:fixed;width:32px;height:32px;border:1px solid rgba(184,168,130,.4);border-radius:50%;pointer-events:none;z-index:9998;transition:transform .35s,opacity .3s;transform:translate(-50%,-50%)}
+
+/* ═══ NAV ═══ */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;justify-content:space-between;align-items:center;padding:22px 56px;background:rgba(13,13,11,.9);backdrop-filter:blur(16px);border-bottom:.5px solid rgba(138,128,112,.12);transition:padding var(--transition)}
+nav.scrolled{padding:14px 56px}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:22px;letter-spacing:.22em;color:var(--iv);text-decoration:none;cursor:pointer}
+.nav-links{display:flex;gap:32px;list-style:none;align-items:center}
+.nav-links a{font-size:9.5px;font-weight:300;letter-spacing:.22em;text-transform:uppercase;color:var(--st);text-decoration:none;transition:color var(--transition);cursor:pointer}
+.nav-links a:hover{color:var(--pa)}
+.nav-cta{padding:9px 20px;border:.5px solid rgba(184,168,130,.4);font-size:9px!important;color:var(--go)!important;letter-spacing:.2em!important;transition:all var(--transition)!important}
+.nav-cta:hover{background:rgba(184,168,130,.1);border-color:var(--go)!important}
+
+/* ═══ PAGES ═══ */
+.page{display:none;min-height:100vh;padding-top:80px}
+.page.active{display:block}
+
+/* ═══ HERO ═══ */
+#page-home{padding-top:0}
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 56px 72px;position:relative;overflow:hidden;background:var(--ob)}
+.hero-grid{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr}
+.hero-r{background:#141210;position:relative}
+.hero-r::before{content:'';position:absolute;top:12%;left:8%;right:8%;bottom:8%;border:.5px solid rgba(184,168,130,.12)}
+.hero-r::after{content:'';position:absolute;top:20%;left:18%;right:4%;bottom:20%;border:.5px solid rgba(138,128,112,.07)}
+.hero-content{position:relative;z-index:2;max-width:680px}
+.hero-eyebrow{display:flex;align-items:center;gap:14px;font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:var(--st);margin-bottom:20px}
+.hero-eyebrow::before{content:'';width:32px;height:.5px;background:var(--go);flex-shrink:0}
+h1.hero-title{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(52px,7.5vw,92px);line-height:1.04;letter-spacing:.02em;color:var(--iv);margin-bottom:28px}
+h1.hero-title em{font-style:italic;color:var(--go)}
+.hero-lead{font-size:13px;line-height:1.9;color:var(--st);max-width:400px;margin-bottom:44px}
+.hero-actions{display:flex;gap:16px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:10px;font-family:'Jost',sans-serif;font-size:9.5px;font-weight:300;letter-spacing:.22em;text-transform:uppercase;padding:14px 28px;border:.5px solid;cursor:pointer;transition:all var(--transition);text-decoration:none;background:transparent}
+.btn-primary{border-color:var(--go);color:var(--pa)}
+.btn-primary:hover{background:var(--go);color:var(--ob)}
+.btn-ghost{border-color:rgba(138,128,112,.3);color:var(--st)}
+.btn-ghost:hover{border-color:var(--st);color:var(--pa)}
+.btn-gold{background:var(--go);border-color:var(--go);color:var(--ob)}
+.btn-gold:hover{background:#A8986E;border-color:#A8986E}
+.btn-dark{background:var(--ob);border-color:var(--ob);color:var(--iv)}
+.btn-dark:hover{background:var(--ch)}
+
+/* ═══ SECTIONS ═══ */
+.sec{padding:100px 56px}
+.sec-label{font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:var(--st);margin-bottom:14px}
+.sec-title{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(30px,4vw,52px);line-height:1.12;color:var(--iv)}
+.sec-title em{font-style:italic}
+.sec-title.dark{color:var(--ch)}
+
+/* ═══ ABOUT ═══ */
+.about-sec{background:var(--iv);color:var(--ch)}
+.about-sec .sec-label{color:var(--st)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;margin-top:56px;align-items:start}
+.about-text{font-size:13.5px;line-height:1.9;color:#5A5248}
+.about-text p+p{margin-top:18px}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.stat{border-top:.5px solid var(--li);padding-top:20px}
+.stat-n{font-family:'Cormorant Garamond',serif;font-size:46px;font-weight:300;color:var(--go);line-height:1;margin-bottom:6px}
+.stat-l{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--st)}
+
+/* ═══ SERVICES ═══ */
+.svc-sec{background:var(--ch)}
+.svc-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(138,128,112,.15);margin-top:56px}
+.svc-card{background:var(--ch);padding:40px 32px;transition:background var(--transition)}
+.svc-card:hover{background:#1E1C18}
+.svc-n{font-family:'Cormorant Garamond',serif;font-size:11px;color:var(--go);letter-spacing:.2em;margin-bottom:18px;display:block}
+.svc-t{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:var(--iv);margin-bottom:12px}
+.svc-d{font-size:12px;line-height:1.85;color:var(--st)}
+
+/* ═══ PROCESS ═══ */
+.proc-sec{background:var(--ob)}
+.proc-steps{margin-top:56px}
+.proc-step{display:grid;grid-template-columns:70px 1fr;gap:20px;padding:28px 0;border-bottom:.5px solid rgba(138,128,112,.18);align-items:start}
+.proc-num{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;color:rgba(138,128,112,.25);line-height:1}
+.step-t{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:400;color:var(--pa);margin-bottom:6px}
+.step-d{font-size:12px;line-height:1.8;color:var(--st)}
+
+/* ═══ INQUIRY FORM ═══ */
+.inquiry-sec{background:var(--iv)}
+.inquiry-wrap{display:grid;grid-template-columns:1fr 1.6fr;gap:72px;margin-top:56px;align-items:start}
+.inquiry-intro{position:sticky;top:100px}
+.inquiry-intro-title{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--ch);line-height:1.3;margin-bottom:20px}
+.inquiry-intro p{font-size:13px;line-height:1.85;color:#5A5248;margin-bottom:16px}
+.inquiry-contact{margin-top:32px;display:flex;flex-direction:column;gap:12px}
+.ic-item{display:flex;flex-direction:column;gap:3px}
+.ic-label{font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--st)}
+.ic-val{font-size:13px;color:var(--ch);font-weight:300}
+
+/* Form */
+.form-card{background:var(--wh);padding:44px;box-shadow:0 24px 80px rgba(0,0,0,.08)}
+.form-section{margin-bottom:32px}
+.form-section-title{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:400;color:var(--ch);margin-bottom:18px;padding-bottom:10px;border-bottom:.5px solid var(--li)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.form-row.full{grid-template-columns:1fr}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group label{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--st)}
+.form-group input,.form-group select,.form-group textarea{
+  font-family:'Jost',sans-serif;font-size:13px;font-weight:300;
+  padding:11px 14px;border:.5px solid #D8D0C0;background:var(--iv);
+  color:var(--ch);outline:none;transition:border-color var(--transition);
+  -webkit-appearance:none;border-radius:0
+}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--go)}
+.form-group textarea{resize:vertical;min-height:90px;line-height:1.7}
+.form-group select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A8070' stroke-width='1.2' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+.checkbox-group{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.checkbox-item{display:flex;align-items:center;gap:10px;cursor:pointer;font-size:12px;color:var(--ch)}
+.checkbox-item input[type=checkbox]{width:16px;height:16px;accent-color:var(--go);cursor:pointer;flex-shrink:0}
+.range-group{display:flex;flex-direction:column;gap:8px}
+.range-group input[type=range]{-webkit-appearance:none;width:100%;height:3px;background:var(--li);outline:none;cursor:pointer}
+.range-group input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--go);cursor:pointer}
+.range-display{display:flex;justify-content:space-between;font-size:11px;color:var(--st)}
+.range-val{font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--go);font-weight:400;text-align:center}
+.form-note{font-size:11px;color:var(--st);line-height:1.6;margin-top:6px}
+.form-success{display:none;text-align:center;padding:48px 24px}
+.form-success-icon{font-size:48px;margin-bottom:16px}
+.form-success h3{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--ch);margin-bottom:12px}
+.form-success p{font-size:13px;color:var(--st);line-height:1.8}
+.step-indicator{display:flex;gap:8px;margin-bottom:32px}
+.step-dot{width:6px;height:6px;border-radius:50%;background:var(--li);transition:all var(--transition)}
+.step-dot.active{background:var(--go);width:24px;border-radius:3px}
+.step-dot.done{background:var(--go)}
+.form-nav{display:flex;justify-content:space-between;align-items:center;margin-top:28px;padding-top:24px;border-top:.5px solid var(--li)}
+
+/* ═══ CLIENT PORTAL ═══ */
+#page-portal{background:var(--ob)}
+.portal-login{max-width:440px;margin:0 auto;padding:60px 24px}
+.portal-login-header{text-align:center;margin-bottom:44px}
+.portal-login-header .logo-mark{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;letter-spacing:.22em;color:var(--iv);display:block;margin-bottom:8px}
+.portal-login-header p{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--st)}
+.login-card{background:#141210;border:.5px solid rgba(138,128,112,.18);padding:40px}
+.login-card .form-group label{color:var(--st)}
+.login-card .form-group input{background:#1A1814;border-color:rgba(138,128,112,.2);color:var(--pa)}
+.login-card .form-group input:focus{border-color:var(--go)}
+.login-card .form-group+.form-group{margin-top:20px}
+.login-footer{text-align:center;margin-top:20px;font-size:11px;color:var(--st)}
+.demo-hint{margin-top:24px;padding:16px;background:rgba(184,168,130,.06);border:.5px solid rgba(184,168,130,.15);font-size:11px;color:var(--st);line-height:1.7;text-align:center}
+.demo-hint strong{color:var(--go);font-weight:300}
+
+/* ═══ DASHBOARD ═══ */
+.dashboard{display:none}
+.dash-header{background:#0D0D0B;border-bottom:.5px solid rgba(138,128,112,.12);padding:24px 40px;display:flex;justify-content:space-between;align-items:center}
+.dash-welcome{font-size:13px;color:var(--pa)}
+.dash-welcome strong{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:400;color:var(--iv);display:block}
+.dash-body{padding:40px}
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px}
+.dash-card{background:#141210;border:.5px solid rgba(138,128,112,.12);padding:28px}
+.dash-card-label{font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--st);margin-bottom:12px}
+.dash-card-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;color:var(--iv);margin-bottom:6px}
+.dash-card-sub{font-size:11px;color:var(--st)}
+.progress-wrap{margin-top:16px}
+.progress-label{display:flex;justify-content:space-between;font-size:10px;color:var(--st);margin-bottom:6px}
+.progress-bar{height:2px;background:rgba(138,128,112,.2);border-radius:1px;overflow:hidden}
+.progress-fill{height:100%;background:var(--go);border-radius:1px;transition:width 1s ease}
+.milestone-list{margin-top:16px;display:flex;flex-direction:column;gap:10px}
+.milestone{display:flex;align-items:center;gap:12px;font-size:12px}
+.milestone-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.milestone-dot.done{background:var(--go)}
+.milestone-dot.active{background:var(--sa);box-shadow:0 0 0 3px rgba(107,123,110,.2)}
+.milestone-dot.pending{background:rgba(138,128,112,.3)}
+.milestone-text{color:var(--pa)}
+.milestone-text.pending{color:var(--st)}
+.milestone-date{margin-left:auto;font-size:10px;color:var(--st);white-space:nowrap}
+.docs-list{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.doc-item{display:flex;align-items:center;gap:14px;padding:12px 14px;background:rgba(255,255,255,.02);border:.5px solid rgba(138,128,112,.1);cursor:pointer;transition:background var(--transition)}
+.doc-item:hover{background:rgba(184,168,130,.06)}
+.doc-icon{width:32px;height:32px;background:rgba(184,168,130,.1);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.doc-name{font-size:12px;color:var(--pa);flex:1}
+.doc-date{font-size:10px;color:var(--st)}
+.msg-thread{display:flex;flex-direction:column;gap:14px;margin-top:16px}
+.msg-item{padding:14px;background:rgba(255,255,255,.02);border-left:2px solid}
+.msg-item.from-arven{border-color:var(--go)}
+.msg-item.from-client{border-color:var(--sa)}
+.msg-from{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--st);margin-bottom:4px}
+.msg-text{font-size:12px;color:var(--pa);line-height:1.7}
+.msg-time{font-size:10px;color:var(--st);margin-top:4px}
+.msg-input-row{display:flex;gap:10px;margin-top:16px}
+.msg-input-row input{flex:1;background:#1A1814;border:.5px solid rgba(138,128,112,.2);color:var(--pa);padding:10px 14px;font-family:'Jost',sans-serif;font-size:12px;outline:none}
+.msg-input-row input:focus{border-color:var(--go)}
+.tag{display:inline-block;font-size:9px;padding:3px 10px;letter-spacing:.1em;border-radius:2px}
+.tag-active{background:rgba(107,123,110,.15);color:var(--sa);border:.5px solid rgba(107,123,110,.3)}
+.tag-review{background:rgba(184,168,130,.12);color:var(--go);border:.5px solid rgba(184,168,130,.3)}
+
+/* ═══ CONTACT PAGE ═══ */
+.contact-sec{background:var(--ob);min-height:80vh;display:flex;align-items:center}
+.contact-title{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(40px,6vw,72px);line-height:1.1;color:var(--iv);margin-bottom:36px}
+.contact-title em{color:var(--go);font-style:italic}
+.contact-info{display:flex;gap:56px;flex-wrap:wrap;margin-top:48px}
+.ci{display:flex;flex-direction:column;gap:4px}
+.ci-l{font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--st)}
+.ci-v{font-size:14px;color:var(--pa);font-weight:300}
+
+/* ═══ FOOTER ═══ */
+footer{padding:28px 56px;border-top:.5px solid rgba(138,128,112,.12);display:flex;justify-content:space-between;align-items:center;background:var(--ob)}
+.f-logo{font-family:'Cormorant Garamond',serif;font-size:15px;letter-spacing:.2em;color:var(--go)}
+.f-copy{font-size:10px;color:var(--st);letter-spacing:.08em}
+
+/* ═══ FADE ═══ */
+.fade{opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease}
+.fade.vis{opacity:1;transform:none}
+
+/* ═══ TOAST ═══ */
+.toast{position:fixed;bottom:32px;right:32px;background:#1A1814;border:.5px solid var(--go);padding:16px 24px;font-size:12px;color:var(--pa);z-index:9999;transform:translateY(80px);opacity:0;transition:all var(--transition)}
+.toast.show{transform:none;opacity:1}
+
+@media(max-width:768px){
+  nav{padding:18px 20px}
+  .nav-links{display:none}
+  .hero,.sec{padding-left:20px;padding-right:20px}
+  .hero{padding-bottom:56px}
+  .about-grid,.inquiry-wrap,.dash-grid{grid-template-columns:1fr;gap:40px}
+  .svc-grid,.form-row{grid-template-columns:1fr}
+  .checkbox-group{grid-template-columns:1fr}
+  .contact-info{flex-direction:column;gap:28px}
+  footer{flex-direction:column;gap:12px;text-align:center;padding:24px 20px}
+  .inquiry-intro{position:static}
+  .form-card{padding:24px}
+  .dash-body{padding:20px}
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="curR"></div>
+<div class="toast" id="toast"></div>
+
+<!-- ═══ NAV ═══ -->
+<nav id="nav">
+  <a class="nav-logo" onclick="showPage('home')">ARVEN</a>
+  <ul class="nav-links">
+    <li><a onclick="scrollToSection('about')">Studio</a></li>
+    <li><a onclick="scrollToSection('services')">Layanan</a></li>
+    <li><a onclick="scrollToSection('process')">Proses</a></li>
+    <li><a onclick="showPage('inquiry')">Mulai Proyek</a></li>
+    <li><a class="nav-cta" onclick="showPage('portal')">Client Portal</a></li>
+  </ul>
+</nav>
+
+<!-- ═══════════════════════════════════════
+     PAGE: HOME
+═══════════════════════════════════════ -->
+<div id="page-home" class="page active">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-grid"><div></div><div class="hero-r"></div></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">Architecture &amp; Consultancy — Bandung</div>
+      <h1 class="hero-title">Where Space<br><em>Meets Intent</em></h1>
+      <p class="hero-lead">Kami merancang bangunan yang tidak hanya indah secara visual, namun menjawab kebutuhan penghuni secara mendalam — dari rumah tinggal hingga kawasan komersial.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" onclick="showPage('inquiry')">Mulai Proyek Anda →</a>
+        <a class="btn btn-ghost" onclick="scrollToSection('about')">Kenali Kami</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="sec about-sec" id="about">
+    <p class="sec-label">Tentang Studio</p>
+    <h2 class="sec-title dark">Firma yang Lahir dari<br><em>Keyakinan</em></h2>
+    <div class="about-grid">
+      <div class="about-text fade">
+        <p>ARVEN Studio didirikan dengan keyakinan bahwa arsitektur yang baik lahir dari percakapan yang dalam — antara ruang, penghuni, dan konteks di mana bangunan itu berdiri.</p>
+        <p>Kami bekerja di persimpangan estetika yang timeless dan kepraktisan teknis, menghadirkan solusi yang tidak hanya indah hari ini, namun tetap relevan selama puluhan tahun ke depan.</p>
+        <p>Berbasis di Bandung, kami memahami iklim tropis, material lokal, dan karakter kota yang dinamis — namun bekerja dengan standar metodologi setara firma internasional.</p>
+        <br>
+        <a class="btn btn-dark" onclick="showPage('inquiry')">Diskusikan Proyek Anda</a>
+      </div>
+      <div class="stats-grid fade">
+        <div class="stat"><div class="stat-n">50+</div><div class="stat-l">Proyek Selesai</div></div>
+        <div class="stat"><div class="stat-n">8+</div><div class="stat-l">Tahun Pengalaman</div></div>
+        <div class="stat"><div class="stat-n">100%</div><div class="stat-l">Kepuasan Klien</div></div>
+        <div class="stat"><div class="stat-n">3</div><div class="stat-l">Penghargaan Nasional</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="sec svc-sec" id="services">
+    <p class="sec-label">Layanan Kami</p>
+    <h2 class="sec-title">Solusi Arsitektur<br><em>Komprehensif</em></h2>
+    <div class="svc-grid">
+      <div class="svc-card fade"><span class="svc-n">01</span><h3 class="svc-t">Desain Arsitektur</h3><p class="svc-d">Rumah tinggal, komersial, hingga kawasan mixed-use. Setiap desain mencerminkan kebutuhan unik klien dan konteks tapak secara mendalam.</p></div>
+      <div class="svc-card fade"><span class="svc-n">02</span><h3 class="svc-t">Konsultasi &amp; Studi Awal</h3><p class="svc-d">Studi kelayakan, analisis tapak, dan konsultasi visi sebelum proyek dimulai — fondasi dari setiap keputusan yang tepat dan efisien.</p></div>
+      <div class="svc-card fade"><span class="svc-n">03</span><h3 class="svc-t">Manajemen Proyek</h3><p class="svc-d">Pengawasan penuh dari perencanaan hingga konstruksi. Kami memastikan desain terwujud sesuai kualitas, anggaran, dan jadwal yang disepakati.</p></div>
+      <div class="svc-card fade"><span class="svc-n">04</span><h3 class="svc-t">Interior &amp; Lanskap</h3><p class="svc-d">Kesinambungan visual dari eksterior ke interior dan ruang luar — menciptakan pengalaman ruang yang kohesif dan menyeluruh bagi penghuni.</p></div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="sec proc-sec" id="process">
+    <p class="sec-label">Cara Kami Bekerja</p>
+    <h2 class="sec-title">Dari Percakapan ke<br><em>Kenyataan</em></h2>
+    <div class="proc-steps">
+      <div class="proc-step fade"><div class="proc-num">01</div><div><div class="step-t">Dialog</div><p class="step-d">Memahami visi, kebutuhan, nilai, dan aspirasi klien secara mendalam sebelum satu garis pun digambar.</p></div></div>
+      <div class="proc-step fade"><div class="proc-num">02</div><div><div class="step-t">Analisis</div><p class="step-d">Studi tapak, regulasi zonasi, anggaran, dan studi preseden untuk membangun kerangka desain yang solid.</p></div></div>
+      <div class="proc-step fade"><div class="proc-num">03</div><div><div class="step-t">Pengembangan Konsep</div><p class="step-d">Presentasi arah desain, eksplorasi material, dan diskusi iteratif hingga konsep menemukan bentuk terbaiknya.</p></div></div>
+      <div class="proc-step fade"><div class="proc-num">04</div><div><div class="step-t">Detail &amp; Dokumen</div><p class="step-d">Gambar kerja teknis, spesifikasi material, dan koordinasi penuh dengan konsultan struktur dan MEP.</p></div></div>
+      <div class="proc-step fade"><div class="proc-num">05</div><div><div class="step-t">Pengawasan Konstruksi</div><p class="step-d">Kunjungan lapangan berkala dan quality control untuk memastikan setiap detail terwujud sesuai desain.</p></div></div>
+    </div>
+    <div style="margin-top:48px;text-align:center">
+      <a class="btn btn-primary" onclick="showPage('inquiry')">Mulai Sekarang →</a>
+    </div>
+  </section>
+
+  <!-- CONTACT STRIP -->
+  <section class="sec contact-sec" id="contact" style="padding:80px 56px">
+    <div>
+      <p class="sec-label">Hubungi Kami</p>
+      <h2 class="contact-title">Setiap Proyek Besar<br>Dimulai dari Satu<br><em>Percakapan</em></h2>
+      <a class="btn btn-primary" onclick="showPage('inquiry')">Kirim Brief Proyek →</a>
+      <div class="contact-info">
+        <div class="ci"><span class="ci-l">Email</span><span class="ci-v">hello@arvenstudio.id</span></div>
+        <div class="ci"><span class="ci-l">Telepon</span><span class="ci-v">+62 22 XXXX XXXX</span></div>
+        <div class="ci"><span class="ci-l">Studio</span><span class="ci-v">Bandung, Jawa Barat</span></div>
+        <div class="ci"><span class="ci-l">Instagram</span><span class="ci-v">@arvenstudio.id</span></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span class="f-logo">ARVEN</span>
+    <span class="f-copy">© 2024 ARVEN Studio. Architecture & Consultancy. Bandung, Indonesia.</span>
+    <span class="f-copy">arvenstudio.id</span>
+  </footer>
+</div>
+
+<!-- ═══════════════════════════════════════
+     PAGE: INQUIRY FORM
+═══════════════════════════════════════ -->
+<div id="page-inquiry" class="page">
+  <section class="sec inquiry-sec">
+    <p class="sec-label">Mulai Proyek</p>
+    <h2 class="sec-title dark">Ceritakan Visi<br><em>Anda kepada Kami</em></h2>
+
+    <div class="inquiry-wrap">
+      <!-- Left: Intro -->
+      <div class="inquiry-intro">
+        <div class="inquiry-intro-title">Setiap proyek besar dimulai dari percakapan yang jujur.</div>
+        <p>Isi form ini untuk membantu kami memahami proyek Anda secara menyeluruh. Tidak ada jawaban yang salah — semakin jujur, semakin baik hasil akhirnya.</p>
+        <p>Tim kami akan menghubungi Anda dalam <strong style="color:var(--go);font-weight:300">1×24 jam</strong> untuk menjadwalkan sesi konsultasi awal.</p>
+        <div class="inquiry-contact">
+          <div class="ic-item"><span class="ic-label">Atau hubungi langsung</span><span class="ic-val">hello@arvenstudio.id</span></div>
+          <div class="ic-item"><span class="ic-label">WhatsApp</span><span class="ic-val">+62 812 XXXX XXXX</span></div>
+        </div>
+      </div>
+
+      <!-- Right: Form -->
+      <div class="form-card">
+        <div class="step-indicator" id="stepInd">
+          <div class="step-dot active" id="dot0"></div>
+          <div class="step-dot" id="dot1"></div>
+          <div class="step-dot" id="dot2"></div>
+          <div class="step-dot" id="dot3"></div>
+        </div>
+
+        <form id="inquiryForm" onsubmit="return false">
+
+          <!-- STEP 1: Identitas -->
+          <div class="form-step" id="fstep0">
+            <div class="form-section">
+              <div class="form-section-title">Identitas Anda</div>
+              <div class="form-row">
+                <div class="form-group"><label>Nama Lengkap *</label><input type="text" id="f-name" placeholder="Budi Santoso"></div>
+                <div class="form-group"><label>Perusahaan / Organisasi</label><input type="text" id="f-company" placeholder="PT. Maju Jaya (opsional)"></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label>Email *</label><input type="email" id="f-email" placeholder="budi@email.com"></div>
+                <div class="form-group"><label>Nomor WhatsApp *</label><input type="tel" id="f-phone" placeholder="+62 812 XXXX XXXX"></div>
+              </div>
+              <div class="form-row full">
+                <div class="form-group"><label>Kota / Lokasi Anda</label><input type="text" id="f-city" placeholder="Bandung, Jawa Barat"></div>
+              </div>
+            </div>
+            <div class="form-nav">
+              <span style="font-size:11px;color:var(--st)">Langkah 1 dari 4</span>
+              <button class="btn btn-gold" onclick="nextStep(0)">Lanjut →</button>
+            </div>
+          </div>
+
+          <!-- STEP 2: Proyek -->
+          <div class="form-step" id="fstep1" style="display:none">
+            <div class="form-section">
+              <div class="form-section-title">Tentang Proyek Anda</div>
+              <div class="form-row full">
+                <div class="form-group">
+                  <label>Jenis Proyek *</label>
+                  <select id="f-type">
+                    <option value="">— Pilih jenis proyek —</option>
+                    <option>Rumah Tinggal Baru</option>
+                    <option>Renovasi Rumah</option>
+                    <option>Bangunan Komersial</option>
+                    <option>Mixed-Use Development</option>
+                    <option>Interior &amp; Lanskap</option>
+                    <option>Konsultasi &amp; Studi Awal</option>
+                    <option>Lainnya</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Lokasi Tapak</label>
+                  <input type="text" id="f-site" placeholder="Jl. Contoh No.1, Bandung">
+                </div>
+                <div class="form-group">
+                  <label>Luas Lahan (m²)</label>
+                  <input type="number" id="f-area" placeholder="Misal: 500">
+                </div>
+              </div>
+              <div class="form-row full">
+                <div class="form-group">
+                  <label>Ceritakan visi Anda *</label>
+                  <textarea id="f-vision" rows="4" placeholder="Deskripsikan proyek impian Anda — gaya yang diinginkan, fungsi utama, suasana yang ingin diciptakan..."></textarea>
+                </div>
+              </div>
+              <div class="form-row full">
+                <div class="form-group">
+                  <label>Layanan yang dibutuhkan</label>
+                  <div class="checkbox-group">
+                    <label class="checkbox-item"><input type="checkbox" name="svc" value="Desain Arsitektur"> Desain Arsitektur</label>
+                    <label class="checkbox-item"><input type="checkbox" name="svc" value="Konsultasi Awal"> Konsultasi Awal</label>
+                    <label class="checkbox-item"><input type="checkbox" name="svc" value="Manajemen Proyek"> Manajemen Proyek</label>
+                    <label class="checkbox-item"><input type="checkbox" name="svc" value="Desain Interior"> Desain Interior</label>
+                    <label class="checkbox-item"><input type="checkbox" name="svc" value="Desain Lanskap"> Desain Lanskap</label>
+                    <label class="checkbox-item"><input type="checkbox" name="svc" value="Pengawasan Konstruksi"> Pengawasan Konstruksi</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-nav">
+              <button class="btn btn-ghost" onclick="prevStep(1)">← Kembali</button>
+              <span style="font-size:11px;color:var(--st)">Langkah 2 dari 4</span>
+              <button class="btn btn-gold" onclick="nextStep(1)">Lanjut →</button>
+            </div>
+          </div>
+
+          <!-- STEP 3: Anggaran & Jadwal -->
+          <div class="form-step" id="fstep2" style="display:none">
+            <div class="form-section">
+              <div class="form-section-title">Anggaran &amp; Jadwal</div>
+              <div class="form-row full">
+                <div class="form-group range-group">
+                  <label>Estimasi Anggaran (Rp Miliar)</label>
+                  <div class="range-val" id="budgetDisplay">Rp 1 – 3 Miliar</div>
+                  <input type="range" id="budgetRange" min="0" max="6" value="2" oninput="updateBudget(this.value)">
+                  <div class="range-display">
+                    <span>&lt; 500 Juta</span><span>1–3 M</span><span>3–5 M</span><span>5–10 M</span><span>10–20 M</span><span>20–50 M</span><span>&gt; 50 M</span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Target Mulai Desain</label>
+                  <select id="f-start">
+                    <option>Segera (dalam 1 bulan)</option>
+                    <option>1–3 bulan ke depan</option>
+                    <option>3–6 bulan ke depan</option>
+                    <option>Lebih dari 6 bulan</option>
+                    <option>Belum ditentukan</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Fleksibilitas Anggaran</label>
+                  <select id="f-flex">
+                    <option>Sangat ketat, tidak bisa berubah</option>
+                    <option>Sedikit fleksibel (±10%)</option>
+                    <option>Cukup fleksibel (±25%)</option>
+                    <option>Fleksibel, kualitas lebih penting</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row full">
+                <div class="form-group">
+                  <label>Referensi / Inspirasi Desain</label>
+                  <textarea id="f-ref" rows="3" placeholder="Link Pinterest, nama arsitek, proyek yang Anda kagumi, atau deskripsi gaya..."></textarea>
+                  <p class="form-note">Referensi membantu kami memahami selera estetika Anda lebih cepat.</p>
+                </div>
+              </div>
+            </div>
+            <div class="form-nav">
+              <button class="btn btn-ghost" onclick="prevStep(2)">← Kembali</button>
+              <span style="font-size:11px;color:var(--st)">Langkah 3 dari 4</span>
+              <button class="btn btn-gold" onclick="nextStep(2)">Lanjut →</button>
+            </div>
+          </div>
+
+          <!-- STEP 4: Preferensi -->
+          <div class="form-step" id="fstep3" style="display:none">
+            <div class="form-section">
+              <div class="form-section-title">Preferensi &amp; Nilai</div>
+              <div class="form-row full">
+                <div class="form-group">
+                  <label>Apa yang paling penting dalam proyek ini? *</label>
+                  <div class="checkbox-group">
+                    <label class="checkbox-item"><input type="checkbox" name="val" value="Estetika"> Estetika &amp; keindahan visual</label>
+                    <label class="checkbox-item"><input type="checkbox" name="val" value="Fungsionalitas"> Fungsionalitas optimal</label>
+                    <label class="checkbox-item"><input type="checkbox" name="val" value="Keberlanjutan"> Keberlanjutan &amp; eco-friendly</label>
+                    <label class="checkbox-item"><input type="checkbox" name="val" value="ROI"> Return on Investment</label>
+                    <label class="checkbox-item"><input type="checkbox" name="val" value="Keunikan"> Keunikan &amp; prestige</label>
+                    <label class="checkbox-item"><input type="checkbox" name="val" value="Durabilitas"> Durabilitas jangka panjang</label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row full">
+                <div class="form-group">
+                  <label>Seberapa sering Anda ingin dilibatkan dalam proses desain?</label>
+                  <select id="f-involve">
+                    <option>Sangat aktif — saya ingin terlibat setiap keputusan</option>
+                    <option>Aktif — saya ingin review di setiap fase utama</option>
+                    <option>Moderat — percayakan pada tim, update berkala</option>
+                    <option>Pasif — saya percaya penuh pada ARVEN Studio</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row full">
+                <div class="form-group">
+                  <label>Ada hal lain yang ingin kami ketahui?</label>
+                  <textarea id="f-extra" rows="3" placeholder="Tantangan khusus tapak, kebutuhan spesial, batasan tertentu, atau pertanyaan awal..."></textarea>
+                </div>
+              </div>
+              <div class="form-row full">
+                <div class="form-group">
+                  <label>Bagaimana Anda lebih suka dihubungi?</label>
+                  <select id="f-contact">
+                    <option>WhatsApp</option>
+                    <option>Email</option>
+                    <option>Telepon</option>
+                    <option>Meeting langsung di studio</option>
+                    <option>Video call (Zoom/Meet)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="form-nav">
+              <button class="btn btn-ghost" onclick="prevStep(3)">← Kembali</button>
+              <span style="font-size:11px;color:var(--st)">Langkah 4 dari 4</span>
+              <button class="btn btn-gold" onclick="submitForm()">Kirim Brief ✓</button>
+            </div>
+          </div>
+
+          <!-- SUCCESS -->
+          <div class="form-success" id="formSuccess">
+            <div class="form-success-icon">✦</div>
+            <h3>Brief Anda Telah Diterima</h3>
+            <p>Terima kasih, <strong id="successName"></strong>.<br>Tim ARVEN Studio akan menghubungi Anda melalui <strong id="successContact"></strong> dalam 1×24 jam untuk menjadwalkan sesi konsultasi awal.</p>
+            <br><br>
+            <button class="btn btn-dark" onclick="showPage('home')" style="margin:0 auto">← Kembali ke Beranda</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══════════════════════════════════════
+     PAGE: CLIENT PORTAL
+═══════════════════════════════════════ -->
+<div id="page-portal" class="page">
+
+  <!-- LOGIN STATE -->
+  <div id="portalLogin">
+    <div class="portal-login">
+      <div class="portal-login-header">
+        <span class="logo-mark">ARVEN</span>
+        <p>Client Portal</p>
+      </div>
+      <div class="login-card">
+        <div class="form-group">
+          <label style="color:var(--st)">Email</label>
+          <input type="email" id="loginEmail" placeholder="email@anda.com" style="background:#1A1814;border-color:rgba(138,128,112,.2);color:var(--pa)">
+        </div>
+        <div class="form-group" style="margin-top:18px">
+          <label style="color:var(--st)">Kode Akses Proyek</label>
+          <input type="password" id="loginCode" placeholder="Kode yang dikirim ARVEN" style="background:#1A1814;border-color:rgba(138,128,112,.2);color:var(--pa)">
+        </div>
+        <button class="btn btn-gold" style="width:100%;justify-content:center;margin-top:24px" onclick="doLogin()">Masuk ke Portal</button>
+        <div class="login-footer">Belum punya kode akses? <a onclick="showPage('inquiry')" style="color:var(--go);cursor:pointer">Ajukan proyek dulu</a></div>
+      </div>
+      <div class="demo-hint">
+        <strong>Demo:</strong> Gunakan email apa saja &amp; kode <strong>ARVEN2024</strong> untuk melihat tampilan portal klien.
+      </div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD STATE -->
+  <div id="portalDash" class="dashboard">
+    <div class="dash-header">
+      <div class="dash-welcome">
+        <strong id="dashName">Budi Santoso</strong>
+        Selamat datang di portal proyek Anda
+      </div>
+      <div style="display:flex;gap:12px;align-items:center">
+        <span class="tag tag-active">Dalam Proses</span>
+        <button class="btn btn-ghost" style="font-size:9px;padding:8px 16px" onclick="doLogout()">Keluar</button>
+      </div>
+    </div>
+
+    <div class="dash-body">
+      <!-- Project Overview -->
+      <div style="margin-bottom:28px">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:var(--iv);margin-bottom:6px">Rumah Tinggal — Dago Atas, Bandung</div>
+        <div style="font-size:12px;color:var(--st)">No. Proyek: ARV-2024-008 &nbsp;·&nbsp; Dimulai: Maret 2024 &nbsp;·&nbsp; Estimasi Selesai: Desember 2024</div>
+      </div>
+
+      <!-- Progress + Milestones -->
+      <div class="dash-grid">
+        <div class="dash-card">
+          <div class="dash-card-label">Progress Keseluruhan</div>
+          <div class="dash-card-title">Fase 3: Pengembangan Desain</div>
+          <div class="dash-card-sub">Saat ini mengerjakan detail gambar lantai 2</div>
+          <div class="progress-wrap">
+            <div class="progress-label"><span>Progres</span><span id="progressPct">65%</span></div>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+          </div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-label">Anggaran</div>
+          <div class="dash-card-title">Rp 2,4 Miliar</div>
+          <div class="dash-card-sub">Total nilai kontrak</div>
+          <div class="progress-wrap">
+            <div class="progress-label"><span>Terpakai</span><span>48%</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:48%;background:var(--sa)"></div></div>
+          </div>
+          <div style="margin-top:12px;font-size:11px;color:var(--st)">Rp 1,15 M terpakai &nbsp;·&nbsp; Rp 1,25 M tersisa</div>
+        </div>
+      </div>
+
+      <!-- Milestones + Documents -->
+      <div class="dash-grid">
+        <div class="dash-card">
+          <div class="dash-card-label">Milestone Proyek</div>
+          <div class="milestone-list">
+            <div class="milestone"><div class="milestone-dot done"></div><span class="milestone-text">Konsultasi Awal &amp; Brief</span><span class="milestone-date">Mar 5</span></div>
+            <div class="milestone"><div class="milestone-dot done"></div><span class="milestone-text">Analisis Tapak</span><span class="milestone-date">Mar 18</span></div>
+            <div class="milestone"><div class="milestone-dot done"></div><span class="milestone-text">Konsep Desain (Disetujui)</span><span class="milestone-date">Apr 10</span></div>
+            <div class="milestone"><div class="milestone-dot active"></div><span class="milestone-text">Pengembangan Desain</span><span class="milestone-date">Ongoing</span></div>
+            <div class="milestone"><div class="milestone-dot pending"></div><span class="milestone-text pending">Gambar Kerja Final</span><span class="milestone-date">Jul 2024</span></div>
+            <div class="milestone"><div class="milestone-dot pending"></div><span class="milestone-text pending">Tender &amp; Konstruksi</span><span class="milestone-date">Agt 2024</span></div>
+            <div class="milestone"><div class="milestone-dot pending"></div><span class="milestone-text pending">Serah Terima</span><span class="milestone-date">Des 2024</span></div>
+          </div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-label">Dokumen Terbaru</div>
+          <div class="docs-list">
+            <div class="doc-item" onclick="showToast('Membuka dokumen...')"><div class="doc-icon">📐</div><span class="doc-name">Denah Lantai 1 — Rev.3</span><span class="doc-date">2 hari lalu</span></div>
+            <div class="doc-item" onclick="showToast('Membuka dokumen...')"><div class="doc-icon">🏗️</div><span class="doc-name">Tampak Depan &amp; Samping</span><span class="doc-date">5 hari lalu</span></div>
+            <div class="doc-item" onclick="showToast('Membuka dokumen...')"><div class="doc-icon">📄</div><span class="doc-name">Berita Acara Konsep v2</span><span class="doc-date">1 mgg lalu</span></div>
+            <div class="doc-item" onclick="showToast('Membuka dokumen...')"><div class="doc-icon">💰</div><span class="doc-name">RAB Estimasi Awal</span><span class="doc-date">2 mgg lalu</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Messages -->
+      <div class="dash-card" style="margin-bottom:24px">
+        <div class="dash-card-label">Pesan dari Tim ARVEN</div>
+        <div class="msg-thread" id="msgThread">
+          <div class="msg-item from-arven">
+            <div class="msg-from">ARVEN Studio — Architect on Duty</div>
+            <div class="msg-text">Halo Pak Budi, revisi denah lantai 2 sudah kami upload. Mohon dicek dan berikan feedback sebelum Jumat ya. Perhatikan khusus area void dan posisi tangga.</div>
+            <div class="msg-time">Hari ini, 09.14</div>
+          </div>
+          <div class="msg-item from-arven">
+            <div class="msg-from">ARVEN Studio — Admin</div>
+            <div class="msg-text">Pengajuan IMB sudah masuk ke Dinas PUPR Kota Bandung. Estimasi proses 30–45 hari kerja.</div>
+            <div class="msg-time">Kemarin, 14.32</div>
+          </div>
+        </div>
+        <div class="msg-input-row">
+          <input type="text" id="msgInput" placeholder="Tulis pesan untuk tim ARVEN..." onkeydown="if(event.key==='Enter')sendMsg()">
+          <button class="btn btn-gold" style="padding:10px 20px;font-size:9px" onclick="sendMsg()">Kirim</button>
+        </div>
+      </div>
+
+      <!-- Next Actions -->
+      <div class="dash-card">
+        <div class="dash-card-label">Tindakan yang Diperlukan</div>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:rgba(184,168,130,.06);border:.5px solid rgba(184,168,130,.2)">
+            <div><div style="font-size:12px;color:var(--pa)">Review Denah Lantai 2 — Rev.3</div><div style="font-size:10px;color:var(--st);margin-top:2px">Batas: Jumat, 14 Juni 2024</div></div>
+            <span class="tag tag-review">Perlu Review</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:rgba(184,168,130,.06);border:.5px solid rgba(184,168,130,.2)">
+            <div><div style="font-size:12px;color:var(--pa)">Konfirmasi Pilihan Material Fasad</div><div style="font-size:10px;color:var(--st);margin-top:2px">Batas: 20 Juni 2024</div></div>
+            <span class="tag tag-review">Perlu Konfirmasi</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:rgba(107,123,110,.06);border:.5px solid rgba(107,123,110,.2)">
+            <div><div style="font-size:12px;color:var(--pa)">Invoice DP Fase 3 — Rp 480 Juta</div><div style="font-size:10px;color:var(--st);margin-top:2px">Jatuh tempo: 1 Juli 2024</div></div>
+            <span class="tag tag-active">Perlu Pembayaran</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// ── CURSOR ──
+const cur = document.getElementById('cur');
+const curR = document.getElementById('curR');
+document.addEventListener('mousemove', e => {
+  cur.style.left = e.clientX + 'px'; cur.style.top = e.clientY + 'px';
+  setTimeout(() => { curR.style.left = e.clientX + 'px'; curR.style.top = e.clientY + 'px'; }, 60);
+});
+
+// ── NAV SCROLL ──
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// ── PAGES ──
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  window.scrollTo(0, 0);
+  if (name === 'home') initFade();
+}
+
+function scrollToSection(id) {
+  showPage('home');
+  setTimeout(() => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  }, 100);
+}
+
+// ── FADE OBSERVER ──
+function initFade() {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.fade').forEach(el => { el.classList.remove('vis'); obs.observe(el); });
+}
+initFade();
+
+// ── FORM STEPS ──
+let currentStep = 0;
+const budgetLabels = ['< Rp 500 Juta', 'Rp 500 Juta – 1 Miliar', 'Rp 1 – 3 Miliar', 'Rp 3 – 5 Miliar', 'Rp 5 – 10 Miliar', 'Rp 10 – 20 Miliar', '> Rp 20 Miliar'];
+
+function updateBudget(v) {
+  document.getElementById('budgetDisplay').textContent = budgetLabels[v] || '—';
+}
+
+function showStep(n) {
+  document.querySelectorAll('.form-step').forEach((s, i) => s.style.display = i === n ? 'block' : 'none');
+  document.querySelectorAll('.step-dot').forEach((d, i) => {
+    d.classList.remove('active', 'done');
+    if (i < n) d.classList.add('done');
+    if (i === n) d.classList.add('active');
+  });
+  currentStep = n;
+}
+
+function nextStep(from) {
+  // Validation
+  if (from === 0) {
+    const name = document.getElementById('f-name').value.trim();
+    const email = document.getElementById('f-email').value.trim();
+    const phone = document.getElementById('f-phone').value.trim();
+    if (!name || !email || !phone) { showToast('Harap isi nama, email, dan nomor WhatsApp.'); return; }
+  }
+  if (from === 1) {
+    const type = document.getElementById('f-type').value;
+    const vision = document.getElementById('f-vision').value.trim();
+    if (!type || !vision) { showToast('Harap pilih jenis proyek dan ceritakan visi Anda.'); return; }
+  }
+  showStep(from + 1);
+  document.querySelector('.form-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function prevStep(from) {
+  showStep(from - 1);
+  document.querySelector('.form-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function submitForm() {
+  const vals = document.querySelectorAll('[name="val"]:checked');
+  if (!vals.length) { showToast('Pilih minimal satu nilai utama proyek Anda.'); return; }
+  const name = document.getElementById('f-name').value;
+  const contactPref = document.getElementById('f-contact').value;
+  document.getElementById('successName').textContent = name;
+  document.getElementById('successContact').textContent = contactPref;
+  document.querySelectorAll('.form-step').forEach(s => s.style.display = 'none');
+  document.getElementById('stepInd').style.display = 'none';
+  document.getElementById('formSuccess').style.display = 'block';
+  showToast('Brief berhasil dikirim! ✓');
+}
+
+// ── PORTAL / LOGIN ──
+function doLogin() {
+  const code = document.getElementById('loginCode').value.trim().toUpperCase();
+  const email = document.getElementById('loginEmail').value.trim();
+  if (!email || !code) { showToast('Isi email dan kode akses terlebih dahulu.'); return; }
+  if (code !== 'ARVEN2024') { showToast('Kode akses tidak valid.'); return; }
+
+  const nameGuess = email.split('@')[0].replace(/[^a-zA-Z]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  document.getElementById('dashName').textContent = nameGuess || 'Klien';
+
+  document.getElementById('portalLogin').style.display = 'none';
+  document.getElementById('portalDash').style.display = 'block';
+
+  // Animate progress bar
+  setTimeout(() => {
+    document.getElementById('progressFill').style.width = '65%';
+  }, 400);
+
+  showToast('Selamat datang di portal Anda!');
+}
+
+function doLogout() {
+  document.getElementById('portalLogin').style.display = 'block';
+  document.getElementById('portalDash').style.display = 'none';
+  document.getElementById('loginEmail').value = '';
+  document.getElementById('loginCode').value = '';
+  document.getElementById('progressFill').style.width = '0%';
+}
+
+// ── MESSAGING ──
+function sendMsg() {
+  const input = document.getElementById('msgInput');
+  const text = input.value.trim();
+  if (!text) return;
+  const thread = document.getElementById('msgThread');
+  const now = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+  const el = document.createElement('div');
+  el.className = 'msg-item from-client';
+  el.innerHTML = `<div class="msg-from">Anda</div><div class="msg-text">${text}</div><div class="msg-time">Hari ini, ${now}</div>`;
+  thread.appendChild(el);
+  input.value = '';
+  thread.scrollTop = thread.scrollHeight;
+  showToast('Pesan terkirim ke tim ARVEN.');
+
+  // Auto-reply
+  setTimeout(() => {
+    const reply = document.createElement('div');
+    reply.className = 'msg-item from-arven';
+    reply.innerHTML = `<div class="msg-from">ARVEN Studio — Tim Desain</div><div class="msg-text">Terima kasih atas pesannya. Kami akan merespons dalam waktu kerja (Senin–Jumat, 08.00–17.00 WIB).</div><div class="msg-time">Hari ini, ${now}</div>`;
+    thread.appendChild(reply);
+    thread.scrollTop = thread.scrollHeight;
+  }, 1800);
+}
+
+// ── TOAST ──
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+</script>
+</body>
+</html>
